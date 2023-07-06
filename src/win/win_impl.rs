@@ -229,13 +229,13 @@ impl KeyboardControllable for Enigo {
             for scan in &scancodes {
                 keybd_event(KEYEVENTF_SCANCODE, VIRTUAL_KEY(0), *scan);
             }
-            thread::sleep(time::Duration::from_millis(20));
+            thread::sleep(time::Duration::from_millis(SLEEP_DURATION));
             for scan in &scancodes {
                 keybd_event(KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP, VIRTUAL_KEY(0), *scan);
             }
         } else {
             keybd_event(KEYBD_EVENT_FLAGS::default(), key_to_keycode(key), 0u16);
-            thread::sleep(time::Duration::from_millis(20));
+            thread::sleep(time::Duration::from_millis(SLEEP_DURATION));
             keybd_event(
                 KEYBD_EVENT_FLAGS::default() | KEYEVENTF_KEYUP,
                 key_to_keycode(key),
@@ -272,10 +272,12 @@ impl KeyboardControllable for Enigo {
     }
 }
 
+const SLEEP_DURATION: u64 = 0;
+
 impl Enigo {
     fn unicode_key_click(&self, unicode_char: u16) {
         self.unicode_key_down(unicode_char);
-        thread::sleep(time::Duration::from_millis(20));
+        thread::sleep(time::Duration::from_millis(SLEEP_DURATION));
         self.unicode_key_up(unicode_char);
     }
 
